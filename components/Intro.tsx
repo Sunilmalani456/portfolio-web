@@ -1,20 +1,39 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { Framework, frameworks } from "@/lib/data";
 import { BsArrowRight, BsLinkedin } from "react-icons/bs";
 import { HiDownload } from "react-icons/hi";
 import { FaGithubSquare } from "react-icons/fa";
 
 import { useSectionInView } from "@/lib/Hooks";
 import { useActiveSectionContext } from "@/context/active-section-context";
+import { assets } from "@/lib/asset-utils";
+import clsx from "clsx";
+import { FrameworkRotation } from "./framework-rotation";
 
 export default function Intro() {
   const { ref } = useSectionInView("Home", 0.5);
   const { setActiveSection, setTimeOfLastClick } = useActiveSectionContext();
-
+  const [currentFramework, setCurrentFramework] = useState<Framework>(
+    frameworks[0]
+  );
+  //
+  //
+  useEffect(() => {
+    let currentIndex = 0;
+    const rotateFrameworks = () => {
+      setCurrentFramework(frameworks[currentIndex]);
+      currentIndex = (currentIndex + 1) % frameworks.length;
+    };
+    const intervalId = setInterval(rotateFrameworks, 2000);
+    return () => clearInterval(intervalId);
+  }, []);
+  //
+  //
   return (
     <section
       ref={ref}
@@ -64,7 +83,28 @@ export default function Intro() {
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <p className="font-acorn">Hello, I'm Sunil.</p> I'm a{" "}
+        <p className="font-acorn mb-2">
+          <span className="font-acorn flex items-center justify-center gap-3 relative">
+            Hello, I'm
+            <FrameworkRotation currentFramework={currentFramework} />
+            <span
+              className={clsx("transition-colors duration-200", {
+                "text-purple-300": currentFramework === "qwik",
+                "text-sky-300": currentFramework === "safari",
+                "text-yellow-300": currentFramework === "chrome",
+                "text-teal-300": currentFramework === "tailwind",
+                "text-blue-300": currentFramework === "react",
+                "text-green-300": currentFramework === "vue",
+                "text-orange-400": currentFramework === "svelte",
+                "text-red-300": currentFramework === "mobile",
+                "text-neutral-300": currentFramework === "desktop",
+              })}
+            >
+              Sunil.
+            </span>
+          </span>
+        </p>
+        I'm a{" "}
         <span className="font-acorn font-extrabold">full-stack developer</span>{" "}
         with <span className="font-acorn font-extrabold">1 years</span> of
         experience. I enjoy building{" "}

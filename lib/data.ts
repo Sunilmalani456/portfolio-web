@@ -112,3 +112,17 @@ export const skillsData = [
   "Django",
   "Framer Motion",
 ] as const;
+
+export const frameworks = [
+  "react",
+  "chrome",
+  "qwik",
+  "mobile",
+  "tailwind",
+  "desktop",
+  "vue",
+  "safari",
+  "svelte",
+] as const;
+
+export type Framework = (typeof frameworks)[number];
